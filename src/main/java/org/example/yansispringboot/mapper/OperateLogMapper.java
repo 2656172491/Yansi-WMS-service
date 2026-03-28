@@ -10,11 +10,4 @@ import java.util.List;
 @Mapper
 public interface OperateLogMapper {
 
-    List<OperateLog> selectPage(@Param("offset") int offset,
-                                @Param("pageSize") int pageSize,
-                                @Param("username") String username);
-
-    long countByCondition(@Param("username") String username);
-
-    int insert(OperateLog operateLog);
 }

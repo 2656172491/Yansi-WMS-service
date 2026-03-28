@@ -13,24 +13,4 @@ import java.util.List;
 @Service
 public class RecordServiceImpl implements RecordService {
 
-    @Autowired
-    private RecordMapper recordMapper;
-
-    @Override
-    public Record getRecordById(Long id) {
-        return recordMapper.selectById(id);
-    }
-
-    @Override
-    public PageResult<Record> getRecords(int page, int pageSize, Long goodsId, Long warehouseId, Integer type) {
-        int offset = (page - 1) * pageSize;
-        List<Record> records = recordMapper.selectPage(offset, pageSize, goodsId, warehouseId, type);
-        long total = recordMapper.countByCondition(goodsId, warehouseId, type);
-        return new PageResult<>(total, records);
-    }
-
-    @Override
-    public int addRecord(Record record) {
-        return recordMapper.insert(record);
-    }
 }

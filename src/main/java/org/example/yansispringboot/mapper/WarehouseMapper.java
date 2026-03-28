@@ -10,19 +10,4 @@ import java.util.List;
 @Mapper
 public interface WarehouseMapper {
 
-    Warehouse selectById(@Param("id") Long id);
-
-    List<Warehouse> selectAll();
-
-    List<Warehouse> selectPage(@Param("offset") int offset,
-                               @Param("pageSize") int pageSize,
-                               @Param("name") String name);
-
-    long countByCondition(@Param("name") String name);
-
-    int insert(Warehouse warehouse);
-
-    int update(Warehouse warehouse);
-
-    int deleteById(@Param("id") Long id);
 }

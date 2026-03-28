@@ -10,19 +10,4 @@ import java.util.List;
 @Mapper
 public interface GoodsMapper {
 
-    Goods selectById(@Param("id") Long id);
-
-    List<Goods> selectPage(@Param("offset") int offset,
-                           @Param("pageSize") int pageSize,
-                           @Param("name") String name,
-                           @Param("categoryId") Long categoryId);
-
-    long countByCondition(@Param("name") String name,
-                          @Param("categoryId") Long categoryId);
-
-    int insert(Goods goods);
-
-    int update(Goods goods);
-
-    int deleteById(@Param("id") Long id);
 }

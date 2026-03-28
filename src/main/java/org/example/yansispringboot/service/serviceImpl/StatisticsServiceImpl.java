@@ -16,27 +16,4 @@ import java.util.Map;
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
 
-    @Autowired
-    private StatisticsMapper statisticsMapper;
-
-    @Autowired
-    private InventoryMapper inventoryMapper;
-
-    @Override
-    public Map<String, Object> getOverview() {
-        Map<String, Object> overview = new HashMap<>();
-        overview.put("totalGoods", statisticsMapper.countTotalGoods());
-        overview.put("todayInbound", statisticsMapper.countTodayInbound());
-        overview.put("todayOutbound", statisticsMapper.countTodayOutbound());
-        overview.put("warningCount", statisticsMapper.countWarningInventory());
-        return overview;
-    }
-
-    @Override
-    public PageResult<Inventory> getWarningList(int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        List<Inventory> records = inventoryMapper.selectWarningPage(offset, pageSize);
-        long total = inventoryMapper.countWarning();
-        return new PageResult<>(total, records);
-    }
 }

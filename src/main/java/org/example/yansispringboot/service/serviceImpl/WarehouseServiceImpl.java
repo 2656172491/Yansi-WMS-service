@@ -13,39 +13,4 @@ import java.util.List;
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
 
-    @Autowired
-    private WarehouseMapper warehouseMapper;
-
-    @Override
-    public Warehouse getWarehouseById(Long id) {
-        return warehouseMapper.selectById(id);
-    }
-
-    @Override
-    public List<Warehouse> getAllWarehouses() {
-        return warehouseMapper.selectAll();
-    }
-
-    @Override
-    public PageResult<Warehouse> getWarehouses(int page, int pageSize, String name) {
-        int offset = (page - 1) * pageSize;
-        List<Warehouse> records = warehouseMapper.selectPage(offset, pageSize, name);
-        long total = warehouseMapper.countByCondition(name);
-        return new PageResult<>(total, records);
-    }
-
-    @Override
-    public int addWarehouse(Warehouse warehouse) {
-        return warehouseMapper.insert(warehouse);
-    }
-
-    @Override
-    public int updateWarehouse(Warehouse warehouse) {
-        return warehouseMapper.update(warehouse);
-    }
-
-    @Override
-    public int deleteWarehouse(Long id) {
-        return warehouseMapper.deleteById(id);
-    }
 }

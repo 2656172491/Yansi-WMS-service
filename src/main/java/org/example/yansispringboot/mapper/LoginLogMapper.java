@@ -10,11 +10,4 @@ import java.util.List;
 @Mapper
 public interface LoginLogMapper {
 
-    List<LoginLog> selectPage(@Param("offset") int offset,
-                              @Param("pageSize") int pageSize,
-                              @Param("username") String username);
-
-    long countByCondition(@Param("username") String username);
-
-    int insert(LoginLog loginLog);
 }

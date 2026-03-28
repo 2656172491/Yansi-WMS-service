@@ -10,15 +10,4 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper {
 
-    Category selectById(@Param("id") Long id);
-
-    List<Category> selectAll();
-
-    List<Category> selectByParentId(@Param("parentId") Long parentId);
-
-    int insert(Category category);
-
-    int update(Category category);
-
-    int deleteById(@Param("id") Long id);
 }
