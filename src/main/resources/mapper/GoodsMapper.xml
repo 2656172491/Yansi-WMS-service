@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.yansispringboot.mapper.GoodsMapper">
+
+    <resultMap id="GoodsResultMap" type="org.example.yansispringboot.pojo.Goods">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="price" property="price"/>
+        <result column="min_stock" property="minStock"/>
+        <result column="max_stock" property="maxStock"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="GoodsResultMap">
+        SELECT * FROM goods WHERE id = #{id} AND is_deleted = 0
+    </select>
+
+    <select id="selectPage" resultMap="GoodsResultMap">
+        SELECT * FROM goods
+        <where>
+            is_deleted = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM goods
+        <where>
+            is_deleted = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO goods (name, code, category_id, specification, unit, price, min_stock, max_stock, status, create_time, update_time, is_deleted)
+        VALUES (#{name}, #{code}, #{categoryId}, #{specification}, #{unit}, #{price}, #{minStock}, #{maxStock}, #{status}, NOW(), NOW(), 0)
+    </insert>
+
+    <update id="update">
+        UPDATE goods
+        SET
+            name = #{name},
+            code = #{code},
+            category_id = #{categoryId},
+            specification = #{specification},
+            unit = #{unit},
+            price = #{price},
+            min_stock = #{minStock},
+            max_stock = #{maxStock},
+            status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteById">
+        UPDATE goods SET is_deleted = 1, update_time = NOW() WHERE id = #{id}
+    </update>
+
+</mapper>
