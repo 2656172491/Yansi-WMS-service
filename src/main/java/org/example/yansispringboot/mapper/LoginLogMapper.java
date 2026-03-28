@@ -10,5 +10,5 @@ public interface LoginLogMapper {
 
     @Insert("insert into loginlog ( username, status, ip, message, createTime) " +
             "values (#{username}, #{status}, #{ip}, #{message}, now())")
-    void log(LoginLog loginLog);
+    void add(LoginLog loginLog);
 }

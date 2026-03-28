@@ -15,4 +15,9 @@ public class AuthServiceImpl implements AuthService {
         User user = authMapper.login(username,password);
         return user != null;
     }
+
+    @Override
+    public User getUserInfo(String username) {
+        return authMapper.getUserInfo(username);
+    }
 }

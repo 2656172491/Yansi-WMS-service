@@ -8,4 +8,7 @@ import org.example.yansispringboot.pojo.User;
 public interface AuthMapper {
     @Select("select * from user where username = #{username} and password = #{password}")
     User login(String username, String password);
+
+    @Select("select * from user where username = #{username}")
+    User getUserInfo(String username);
 }
