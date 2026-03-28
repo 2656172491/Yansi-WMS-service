@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.yansispringboot.mapper.WarehouseMapper">
+
+    <resultMap id="WarehouseResultMap" type="org.example.yansispringboot.pojo.Warehouse">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="address" property="address"/>
+        <result column="contact" property="contact"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="WarehouseResultMap">
+        SELECT * FROM warehouses WHERE id = #{id} AND is_delete = 0
+    </select>
+
+    <select id="selectAll" resultMap="WarehouseResultMap">
+        SELECT * FROM warehouses WHERE is_delete = 0 ORDER BY id ASC
+    </select>
+
+    <select id="selectPage" resultMap="WarehouseResultMap">
+        SELECT * FROM warehouses
+        <where>
+            is_delete = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM warehouses
+        <where>
+            is_delete = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO warehouses (name, code, address, contact, phone, status, created_at, updated_at, is_delete)
+        VALUES (#{name}, #{code}, #{address}, #{contact}, #{phone}, #{status}, NOW(), NOW(), 0)
+    </insert>
+
+    <update id="update">
+        UPDATE warehouses
+        SET
+            name = #{name},
+            code = #{code},
+            address = #{address},
+            contact = #{contact},
+            phone = #{phone},
+            status = #{status},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteById">
+        UPDATE warehouses SET is_delete = 1, updated_at = NOW() WHERE id = #{id}
+    </update>
+
+</mapper>

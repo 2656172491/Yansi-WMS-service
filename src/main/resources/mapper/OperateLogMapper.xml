@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.yansispringboot.mapper.OperateLogMapper">
+
+    <resultMap id="OperateLogResultMap" type="org.example.yansispringboot.pojo.OperateLog">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="ip" property="ip"/>
+        <result column="date_time" property="dateTime"/>
+    </resultMap>
+
+    <select id="selectPage" resultMap="OperateLogResultMap">
+        SELECT * FROM operate_logs
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM operate_logs
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO operate_logs (username, type, content, ip, date_time)
+        VALUES (#{username}, #{type}, #{content}, #{ip}, NOW())
+    </insert>
+
+</mapper>

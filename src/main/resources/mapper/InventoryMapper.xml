@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.yansispringboot.mapper.InventoryMapper">
+
+    <resultMap id="InventoryResultMap" type="org.example.yansispringboot.pojo.Inventory">
+        <id column="id" property="id"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="warehouse_id" property="warehouseId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="InventoryResultMap">
+        SELECT * FROM inventory WHERE id = #{id}
+    </select>
+
+    <select id="selectByGoodsAndWarehouse" resultMap="InventoryResultMap">
+        SELECT * FROM inventory WHERE goods_id = #{goodsId} AND warehouse_id = #{warehouseId} LIMIT 1
+    </select>
+
+    <select id="selectPage" resultMap="InventoryResultMap">
+        SELECT * FROM inventory
+        <where>
+            <if test="goodsId != null">
+                AND goods_id = #{goodsId}
+            </if>
+            <if test="warehouseId != null">
+                AND warehouse_id = #{warehouseId}
+            </if>
+        </where>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM inventory
+        <where>
+            <if test="goodsId != null">
+                AND goods_id = #{goodsId}
+            </if>
+            <if test="warehouseId != null">
+                AND warehouse_id = #{warehouseId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询低于最小库存预警阈值的库存记录 -->
+    <select id="selectWarningPage" resultMap="InventoryResultMap">
+        SELECT i.* FROM inventory i
+        JOIN goods g ON i.goods_id = g.id
+        WHERE i.quantity &lt; g.min_stock AND g.is_deleted = 0
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countWarning" resultType="long">
+        SELECT COUNT(*) FROM inventory i
+        JOIN goods g ON i.goods_id = g.id
+        WHERE i.quantity &lt; g.min_stock AND g.is_deleted = 0
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inventory (goods_id, warehouse_id, quantity, create_time, update_time)
+        VALUES (#{goodsId}, #{warehouseId}, #{quantity}, NOW(), NOW())
+    </insert>
+
+    <update id="update">
+        UPDATE inventory
+        SET
+            goods_id = #{goodsId},
+            warehouse_id = #{warehouseId},
+            quantity = #{quantity},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM inventory WHERE id = #{id}
+    </delete>
+
+</mapper>
