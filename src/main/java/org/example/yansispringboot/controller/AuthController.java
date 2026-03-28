@@ -15,8 +15,6 @@ public class AuthController {
     private AuthService authService;
     @PostMapping("/login")
     public Result<String> login(String username, String password) {
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
         if (username == null || password == null) {
             return Result.error("用户名和密码不能为空");
         }
