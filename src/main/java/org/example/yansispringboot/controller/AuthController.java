@@ -9,6 +9,9 @@ import org.example.yansispringboot.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // 认证控制器，处理用户登录、注册等相关请求
 @RestController
 @RequestMapping("/auth")
@@ -28,7 +31,7 @@ public class AuthController {
      * @return token   JWT令牌
      */
     @PostMapping("/login")
-    public Result<String> login(String username, String password, HttpServletRequest request) {
+    public Result<Map<String,Object>> login(String username, String password, HttpServletRequest request) {
         log.info("用户登录请求，用户名：{}", username);
         log.info("用户的登录ip地址：{}", request.getRemoteAddr());
         if (username == null || password == null) {
@@ -36,12 +39,19 @@ public class AuthController {
             log.info("用户登录失败");
             return Result.error("用户名和密码不能为空");
         }
+
         String token = authService.login(username,password);
         if(token != null){
             logService.userLog(username,0,request.getRemoteAddr(),"登录成功");
             log.info("用户登录成功");
-            return Result.success(token);
+
+            User user = authService.getUserInfo(token);
+            Map<String,Object> map = new HashMap<>();
+            map.put("token",token);
+            map.put("userInfo",user);
+            return Result.success(map);
         }
+
         logService.userLog(username,1,request.getRemoteAddr(),"登录失败,用户名或密码错误");
         log.info("用户登录失败");
         return Result.error("账号密码错误，请重新登录");
@@ -49,14 +59,15 @@ public class AuthController {
 
     /**
      * 登出请求
-     * @param username  用户名
      * @param request 请求对象，用于获取用户IP地址等信息
      * @return string 成功退出
      */
     @PostMapping("/logout")
-    public Result<String> logout(String username, HttpServletRequest request){
-        log.info("用户登出请求,用户名:{}",username);
-        logService.userLog(username,0,request.getRemoteAddr(),"用户登出");
+    public Result<String> logout(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+
+        log.info("用户登出请求,token:{}",token);
+        logService.userLog(token,0,request.getRemoteAddr(),"用户登出");
         return Result.success("成功退出");
     }
 

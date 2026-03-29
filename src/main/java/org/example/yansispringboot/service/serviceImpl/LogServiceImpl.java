@@ -21,7 +21,8 @@ public class LogServiceImpl implements LogService {
     private OperateLogMapper operateLogMapper;
 
     @Override
-    public void userLog(String username, int status, String ip, String message) {
+    public void userLog(String token, int status, String ip, String message) {
+        String username = JWTUtil.parseToken(token).getPayload().getClaim("username").toString();
         LoginLog loginLog = new LoginLog();
         loginLog.setUsername(username);
         loginLog.setStatus(status);
