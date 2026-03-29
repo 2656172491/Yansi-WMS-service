@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // 统计控制器，处理与统计相关的请求，如获取用户活动统计、系统性能统计等
@@ -37,7 +38,7 @@ public class StatisticsController {
         log.info(token);
         log.info("用户 {} 请求获取统计概览", username);
         // 记录日志
-        logService.actionLog(token, "获取数据","首页", "统计概览",request.getRemoteAddr());
+        logService.actionLog(token, "get","首页", "统计概览",request.getRemoteAddr());
 
         Map<String,Integer> map = new HashMap<>();
         // 获取物资总数
@@ -52,5 +53,21 @@ public class StatisticsController {
         map.put("InventoryWarning", getInventoryWarning);
 
         return Result.success(map);
+    }
+
+    @GetMapping("/activities")
+    public Result<List<Map<String,String>>> getUserActivities(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info(token);
+        log.info("用户 {} 请求获取最近动态", username);
+        // 记录日志
+        logService.actionLog(token, "get","首页", "获取最近动态",request.getRemoteAddr());
+
+        List<Map<String,String>> activities = logService.getRecentActivities();
+        log.info("用户 {} 的最近活动: {}", username, activities);
+        return Result.success(activities);
     }
 }
