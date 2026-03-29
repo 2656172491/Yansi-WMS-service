@@ -12,4 +12,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-
+jwt:
+  secret: "wsq520131425052026329"

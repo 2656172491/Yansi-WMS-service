@@ -1,5 +1,6 @@
 package org.example.yansispringboot.service.serviceImpl;
 
+import cn.hutool.jwt.JWTUtil;
 import org.example.yansispringboot.mapper.LoginLogMapper;
 import org.example.yansispringboot.mapper.OperateLogMapper;
 import org.example.yansispringboot.pojo.LoginLog;
@@ -30,7 +31,9 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void actionLog(String username, String type,String module, String content, String ip) {
+    public void actionLog(String token, String type,String module, String content, String ip) {
+        // 解析JWT令牌，获取用户名
+        String username = JWTUtil.parseToken(token).getPayload().getClaim("username").toString();
         OperateLog operateLog = new OperateLog();
         operateLog.setUsername(username);
         operateLog.setType(type);

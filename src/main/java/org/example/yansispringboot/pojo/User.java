@@ -1,5 +1,6 @@
 package org.example.yansispringboot.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 public class User {
     private long id;            // 用户ID
     private String username;        // 用户名
+    @JsonIgnore // 在序列化时忽略密码字段，避免泄露敏感信息
     private String password;    // 密码
     private String realName;    // 真实姓名
     private String phone;       // 电话号码

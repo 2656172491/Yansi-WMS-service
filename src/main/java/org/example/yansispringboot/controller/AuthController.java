@@ -33,14 +33,17 @@ public class AuthController {
         log.info("用户的登录ip地址：{}", request.getRemoteAddr());
         if (username == null || password == null) {
             logService.userLog(username,1,request.getRemoteAddr(),"登录失败,用户名或密码为空");
+            log.info("用户登录失败");
             return Result.error("用户名和密码不能为空");
         }
-        if(authService.login(username,password)){
+        String token = authService.login(username,password);
+        if(token != null){
             logService.userLog(username,0,request.getRemoteAddr(),"登录成功");
-            String token = "11";
+            log.info("用户登录成功");
             return Result.success(token);
         }
         logService.userLog(username,1,request.getRemoteAddr(),"登录失败,用户名或密码错误");
+        log.info("用户登录失败");
         return Result.error("账号密码错误，请重新登录");
     }
 
@@ -59,15 +62,15 @@ public class AuthController {
 
     /**
      * 获取用户信息
-     * @param username 用户名
+     * @param token 用户名
      * @param request 请求对象，用于获取用户IP地址等信息
      * @return User 用户信息
      */
     @GetMapping("/me")
-    public Result<User> getUserInfo(@RequestParam String username,@RequestParam String module, HttpServletRequest request){
-        log.info("获取用户信息请求,用户名:{}",username);
-        User user = authService.getUserInfo(username);
-        logService.actionLog(username,"获取用户信息",module,"获取用户信息成功",request.getRemoteAddr());
+    public Result<User> getUserInfo(@RequestParam String token,@RequestParam String module, HttpServletRequest request){
+        log.info("获取用户信息请求,token:{}",token);
+        User user = authService.getUserInfo(token);
+        logService.actionLog(token,"获取用户信息",module,"获取用户信息成功",request.getRemoteAddr());
         return Result.success(user);
     }
 
