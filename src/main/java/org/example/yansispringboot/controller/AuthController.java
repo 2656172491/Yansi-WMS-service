@@ -42,7 +42,7 @@ public class AuthController {
 
         String token = authService.login(username,password);
         if(token != null){
-            logService.userLog(username,0,request.getRemoteAddr(),"登录成功");
+            logService.userLog(token,0,request.getRemoteAddr(),"登录成功");
             log.info("用户登录成功");
 
             User user = authService.getUserInfo(token);
