@@ -12,5 +12,14 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
 jwt:
   secret: "wsq520131425052026329"
+
+  #分页插件
+pagehelper:
+  helper-dialect: mysql
+  params:
+    count: countSql
+  reasonable: true
+  support-methods-arguments: true
