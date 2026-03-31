@@ -4,13 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.yansispringboot.common.PageResult;
 import org.example.yansispringboot.common.Result;
+import org.example.yansispringboot.pojo.Record;
 import org.example.yansispringboot.service.GoodsService;
 import org.example.yansispringboot.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
@@ -34,7 +32,6 @@ public class GoodsController {
         JWT jwt = JWTUtil.parseToken(token);
         JWTPayload payload = jwt.getPayload();
         String username = (String) payload.getClaim("username");
-
         log.info("用户 {} 获取物资列表, 页码: {}, 每页数量: {}", username, pageNum, pageSize);
 
         // 记录日志
@@ -43,5 +40,21 @@ public class GoodsController {
         PageResult result = goodsService.getAllGoods(pageNum, pageSize);
 
         return Result.success(result);
+    }
+
+    @PutMapping("/{id}")
+    public Result updateGoods(@PathVariable Integer id,
+                              @RequestBody Record record,
+                              HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info("用户 {} 更新物资", username);
+        log.info(String.valueOf(record));
+        // 记录日志
+        logService.actionLog(token, "set", "物资列表", "更新物资", request.getRemoteAddr());
+        goodsService.updateGoods(id, record, username);
+        return Result.success();
     }
 }
