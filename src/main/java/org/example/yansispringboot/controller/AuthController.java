@@ -34,15 +34,16 @@ public class AuthController {
     public Result<Map<String,Object>> login(String username, String password, HttpServletRequest request) {
         log.info("用户登录请求，用户名：{}", username);
         log.info("用户的登录ip地址：{}", request.getRemoteAddr());
+        String token = authService.login(username,password);
+
         if (username == null || password == null) {
-            logService.userLog(username,1,request.getRemoteAddr(),"登录失败,用户名或密码为空");
+            logService.userLog(token,0,request.getRemoteAddr(),"登录失败,用户名或密码为空",request.getHeader("User-Agent"));
             log.info("用户登录失败");
             return Result.error("用户名和密码不能为空");
         }
 
-        String token = authService.login(username,password);
         if(token != null){
-            logService.userLog(token,0,request.getRemoteAddr(),"登录成功");
+            logService.userLog(token,1,request.getRemoteAddr(),"登录成功",request.getHeader("User-Agent"));
             log.info("用户登录成功");
 
             User user = authService.getUserInfo(token);
@@ -52,7 +53,7 @@ public class AuthController {
             return Result.success(map);
         }
 
-        logService.userLog(username,1,request.getRemoteAddr(),"登录失败,用户名或密码错误");
+        logService.userLog(token,0,request.getRemoteAddr(),"登录失败,用户名或密码错误",request.getHeader("User-Agent"));
         log.info("用户登录失败");
         return Result.error("账号密码错误，请重新登录");
     }
@@ -67,7 +68,7 @@ public class AuthController {
         String token = request.getHeader("Authorization");
 
         log.info("用户登出请求,token:{}",token);
-        logService.userLog(token,0,request.getRemoteAddr(),"用户登出");
+        logService.userLog(token,1,request.getRemoteAddr(),"用户登出",request.getHeader("User-Agent"));
         return Result.success("成功退出");
     }
 

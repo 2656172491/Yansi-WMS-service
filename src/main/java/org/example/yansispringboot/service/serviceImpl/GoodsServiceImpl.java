@@ -56,7 +56,7 @@ public class GoodsServiceImpl implements GoodsService {
             // 出库
             inventory.setQuantity(nowQuantity - record.getQuantity());
         }
-        record.setOperator(username);
+        record.setOperatorName(username);
         recordMapper.insertRecord(record);
     }
 }

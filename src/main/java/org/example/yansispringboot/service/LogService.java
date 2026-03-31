@@ -6,9 +6,9 @@ import java.util.Map;
 // 日志服务接口
 public interface LogService {
 
-    void userLog(String username, int i, String remoteAddr, String s);
+    void userLog(String token, int status, String ip, String message, String userAgent);
 
-    void actionLog(String username, String type, String module,String content, String remoteAddr);
+    void actionLog(String token, String type, String module,String content, String remoteAddr);
 
     List<Map<String, String>> getRecentActivities();
 }

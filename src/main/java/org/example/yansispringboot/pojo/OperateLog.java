@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class OperateLog {
     private long id;            // 日志ID
+    private long userId;        // 用户ID
     private String username;    // 用户名
     private String type;        // 操作类型（get\set）
     private String module;      // 操作页面

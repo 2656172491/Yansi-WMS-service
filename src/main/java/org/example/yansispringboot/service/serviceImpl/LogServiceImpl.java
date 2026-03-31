@@ -1,5 +1,7 @@
 package org.example.yansispringboot.service.serviceImpl;
 
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import org.example.yansispringboot.mapper.LoginLogMapper;
 import org.example.yansispringboot.mapper.OperateLogMapper;
@@ -26,21 +28,33 @@ public class LogServiceImpl implements LogService {
     private OperateLogMapper operateLogMapper;
 
     @Override
-    public void userLog(String token, int status, String ip, String message) {
-        String username = JWTUtil.parseToken(token).getPayload().getClaim("username").toString();
+    public void userLog(String token, int status, String ip, String message, String userAgent) {
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = payload.getClaim("username").toString();
+        int userId = Integer.parseInt(payload.getClaim("userId").toString());
+
         LoginLog loginLog = new LoginLog();
+        loginLog.setUserId(userId);
         loginLog.setUsername(username);
         loginLog.setStatus(status);
         loginLog.setIp(ip);
         loginLog.setMessage(message);
+        loginLog.setUserAgent(userAgent);
+
         loginLogMapper.add(loginLog);
     }
 
     @Override
     public void actionLog(String token, String type,String module, String content, String ip) {
         // 解析JWT令牌，获取用户名
-        String username = JWTUtil.parseToken(token).getPayload().getClaim("username").toString();
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = payload.getClaim("username").toString();
+        int userId = Integer.parseInt(payload.getClaim("userId").toString());
+
         OperateLog operateLog = new OperateLog();
+        operateLog.setUserId(userId);
         operateLog.setUsername(username);
         operateLog.setType(type);
         operateLog.setModule(module);
@@ -61,7 +75,6 @@ public class LogServiceImpl implements LogService {
             map.put("time", item.get("create_time").toString());
             lastList.add(map);
         }
-        System.out.println(lastList);
         return lastList;
     }
 }

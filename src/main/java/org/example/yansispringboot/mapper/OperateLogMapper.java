@@ -13,10 +13,10 @@ import java.util.Map;
 @Mapper
 public interface OperateLogMapper {
 
-    @Insert("insert into operatelog (username, type, module, content, ip, create_time) " +
-            "values (#{username}, #{type}, #{module}, #{content}, #{ip}, now())")
+    @Insert("insert into operate_log(user_id,username,type,module,content,ip) " +
+            "values(#{userId},#{username},#{type},#{module},#{content},#{ip})")
     void addLog(OperateLog operateLog);
 
-    @Select("select id,username,content,create_time from operatelog where type = 'set'")
+    @Select("select id,username,content,create_time from operate_log where type = 'set'")
     List<Map<String, Object>> getRecentActivities();
 }

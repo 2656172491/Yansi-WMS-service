@@ -11,7 +11,8 @@ public class Record {
     private int quantity;   // 数量
     private int beforeQuantity; // 操作前数量
     private int afterQuantity;  // 操作后数量
-    private String operator;    // 操作人
+    private long operatorId;   // 操作人ID
+    private String operatorName;    // 操作人
     private String remark;      // 备注
     private String createTime;  // 创建时间
 }

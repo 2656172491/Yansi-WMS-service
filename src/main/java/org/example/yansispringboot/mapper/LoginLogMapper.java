@@ -8,7 +8,7 @@ import org.example.yansispringboot.pojo.LoginLog;
 @Mapper
 public interface LoginLogMapper {
 
-    @Insert("insert into loginlog ( username, status, ip, message, createTime) " +
-            "values (#{username}, #{status}, #{ip}, #{message}, now())")
+    @Insert("insert into login_log(user_id, username, status, ip, message, user_agent) " +
+            "values(#{userId}, #{username}, #{status}, #{ip}, #{message}, #{userAgent})")
     void add(LoginLog loginLog);
 }

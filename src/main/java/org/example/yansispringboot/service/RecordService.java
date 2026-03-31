@@ -3,7 +3,9 @@ package org.example.yansispringboot.service;
 import org.example.yansispringboot.common.PageResult;
 import org.example.yansispringboot.pojo.Record;
 
+
 // 出入库记录服务接口
 public interface RecordService {
 
+    PageResult<Record> getAllRecords(Integer pageNum, Integer pageSize, Integer type);
 }

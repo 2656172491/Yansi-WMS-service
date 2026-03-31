@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
             Map<String,Object> payload = new HashMap<>();
             payload.put("username",userInfo.getUsername());
             payload.put("realName",userInfo.getRealName());
-            payload.put("role",userInfo.getRole());
+            payload.put("role",userInfo.getRoleId());
 
             // 使用HMAC SHA256算法和密钥生成JWT令牌
             String token = JWTUtil.createToken(header, payload, jwtSecret.getBytes(StandardCharsets.UTF_8));
