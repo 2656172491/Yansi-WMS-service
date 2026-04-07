@@ -32,7 +32,7 @@ public class LogServiceImpl implements LogService {
         JWT jwt = JWTUtil.parseToken(token);
         JWTPayload payload = jwt.getPayload();
         String username = payload.getClaim("username").toString();
-        int userId = Integer.parseInt(payload.getClaim("userId").toString());
+        int userId = Integer.parseInt(payload.getClaim("id").toString());
 
         LoginLog loginLog = new LoginLog();
         loginLog.setUserId(userId);
@@ -50,8 +50,8 @@ public class LogServiceImpl implements LogService {
         // 解析JWT令牌，获取用户名
         JWT jwt = JWTUtil.parseToken(token);
         JWTPayload payload = jwt.getPayload();
-        String username = payload.getClaim("username").toString();
-        int userId = Integer.parseInt(payload.getClaim("userId").toString());
+        String username = (String) payload.getClaim("username");
+        int userId = Integer.parseInt(payload.getClaim("id").toString());
 
         OperateLog operateLog = new OperateLog();
         operateLog.setUserId(userId);
@@ -71,6 +71,7 @@ public class LogServiceImpl implements LogService {
             System.out.println(item);
             Map<String,String> map = new HashMap<>();
             map.put("id", item.get("id").toString());
+            map.put("type",item.get("type").toString());
             map.put("content", "用户：" + item.get("username").toString() + "," + item.get("content").toString());
             map.put("time", item.get("create_time").toString());
             lastList.add(map);

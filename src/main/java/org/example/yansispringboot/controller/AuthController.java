@@ -43,9 +43,8 @@ public class AuthController {
         }
 
         if(token != null){
-            logService.userLog(token,1,request.getRemoteAddr(),"登录成功",request.getHeader("User-Agent"));
             log.info("用户登录成功");
-
+            logService.userLog(token,1,request.getRemoteAddr(),"登录成功",request.getHeader("User-Agent"));
             User user = authService.getUserInfo(token);
             Map<String,Object> map = new HashMap<>();
             map.put("token",token);

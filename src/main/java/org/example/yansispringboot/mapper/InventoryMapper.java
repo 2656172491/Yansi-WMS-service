@@ -9,6 +9,13 @@ import org.example.yansispringboot.pojo.Inventory;
 @Mapper
 public interface InventoryMapper {
 
-    @Select("select * from inventory where goods_id = #{goodsId} and warehouse_id = #{warehouseId}")
+    /**
+     * 根据物资ID和仓库ID查询库存信息
+     * @param goodsId 物资id
+     * @param warehouseId 仓库id
+     * @return 库存信息
+     */
+    @Select("select * from inventory " +
+            "where goods_id = #{goodsId} and warehouse_id = #{warehouseId}")
     Inventory getByIdInventory(long goodsId, long warehouseId);
 }

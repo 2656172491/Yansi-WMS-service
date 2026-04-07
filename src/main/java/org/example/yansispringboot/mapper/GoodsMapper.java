@@ -10,6 +10,10 @@ import java.util.List;
 @Mapper
 public interface GoodsMapper {
 
+    /**
+     * 查询所有物资信息
+     * @return 物资列表
+     */
     @Select("SELECT * FROM goods")
     List<Goods> getAllGoods();
 

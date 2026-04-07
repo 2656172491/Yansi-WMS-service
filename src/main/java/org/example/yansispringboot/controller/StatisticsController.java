@@ -72,7 +72,6 @@ public class StatisticsController {
         JWT jwt = JWTUtil.parseToken(token);
         JWTPayload payload = jwt.getPayload();
         String username = (String) payload.getClaim("username");
-        log.info(token);
         log.info("用户 {} 请求获取最近动态", username);
         // 记录日志
         logService.actionLog(token, "get","首页", "获取最近动态",request.getRemoteAddr());
