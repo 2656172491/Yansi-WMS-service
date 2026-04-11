@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.yansispringboot.common.PageResult;
 import org.example.yansispringboot.common.Result;
+import org.example.yansispringboot.pojo.Goods;
 import org.example.yansispringboot.pojo.Record;
 import org.example.yansispringboot.service.GoodsService;
 import org.example.yansispringboot.service.LogService;
@@ -56,5 +57,11 @@ public class GoodsController {
         logService.actionLog(token, "set", "物资列表", "更新物资", request.getRemoteAddr());
         goodsService.updateGoods(id, record, username);
         return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result<Goods> getGoodById(@PathVariable String id){
+        Goods good = goodsService.getGoodById(id);
+        return Result.success(good);
     }
 }

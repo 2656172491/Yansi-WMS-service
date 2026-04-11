@@ -17,4 +17,6 @@ public interface GoodsMapper {
     @Select("SELECT * FROM goods")
     List<Goods> getAllGoods();
 
+    @Select("SELECT * from goods where id = #{id}")
+    Goods getGoodById(String id);
 }
