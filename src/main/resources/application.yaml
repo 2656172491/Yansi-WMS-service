@@ -13,9 +13,9 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.example.yansispring.entity
 jwt:
   secret: "wsq520131425052026329"
-
   #分页插件
 pagehelper:
   helper-dialect: mysql

@@ -11,5 +11,16 @@ import java.util.List;
 // 角色服务实现类
 @Service
 public class RoleServiceImpl implements RoleService {
+    @Autowired
+    private RoleMapper roleMapper;
 
+    @Override
+    public Role getRoleById(Integer id) {
+        return roleMapper.getRoleById(id);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleMapper.getAllRoles();
+    }
 }

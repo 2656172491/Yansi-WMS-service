@@ -1,7 +1,7 @@
 package org.example.yansispringboot.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.example.yansispringboot.pojo.Role;
 
 import java.util.List;
@@ -10,4 +10,9 @@ import java.util.List;
 @Mapper
 public interface RoleMapper {
 
+    @Select("SELECT * FROM role WHERE id = #{id}")
+    Role getRoleById(Integer id);
+
+    @Select("SELECT * FROM role")
+    List<Role> getAllRoles();
 }

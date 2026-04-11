@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.yansispringboot.mapper.UserMapper">
+
+    <!-- 1. 统计专用：查询全部未删除用户 -->
+    <select id="listAllUsers" resultType="org.example.yansispringboot.pojo.User">
+        SELECT
+            id,
+            username,
+            real_name AS realName,
+            role_id AS roleId,
+            phone,
+            email,
+            status,
+            last_login_ip AS lastLoginIp,
+            last_login_time AS lastLoginTime,
+            avatar
+        FROM user
+        WHERE is_deleted = 0
+    </select>
+
+    <!-- 2. 分页列表专用：带条件 + 分页 -->
+    <select id="getAllUsers" resultType="org.example.yansispringboot.pojo.User">
+        SELECT
+        id,
+        username,
+        real_name AS realName,
+        role_id AS roleId,
+        phone,
+        email,
+        status,
+        last_login_ip AS lastLoginIp,
+        last_login_time AS lastLoginTime,
+        avatar
+        FROM user
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="roleId != null and roleId != ''">
+                AND role_id = #{roleId}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+</mapper>
