@@ -36,7 +36,7 @@ public class InventoryController {
         String username = (String) payload.getClaim("username");
         log.info("用户:{}请求获取物资:{}信息",username,goodId);
 
-        logService.actionLog(token,"查询","库存列表","查询物资:"+goodId,request.getRemoteAddr());
+        logService.actionLog(token,"get","库存列表","查询物资:"+goodId,request.getRemoteAddr());
         List<Inventory> inventorys = inventoryService.getInventoryByGoodId(goodId);
         return Result.success(inventorys);
     }
