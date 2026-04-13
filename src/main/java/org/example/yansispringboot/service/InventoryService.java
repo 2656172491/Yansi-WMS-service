@@ -1,6 +1,7 @@
 package org.example.yansispringboot.service;
 
 import org.example.yansispringboot.pojo.Inventory;
+import org.example.yansispringboot.pojo.Record;
 
 import java.util.List;
 
@@ -8,4 +9,6 @@ import java.util.List;
 public interface InventoryService {
 
     List<Inventory> getInventoryByGoodId(Long goodId);
+
+    void updateInventory(Integer id, Record record, String username);
 }

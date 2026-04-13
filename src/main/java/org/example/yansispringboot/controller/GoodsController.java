@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.yansispringboot.common.PageResult;
 import org.example.yansispringboot.common.Result;
 import org.example.yansispringboot.pojo.Goods;
-import org.example.yansispringboot.pojo.Record;
 import org.example.yansispringboot.service.GoodsService;
 import org.example.yansispringboot.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,11 @@ public class GoodsController {
     @GetMapping
     public Result<PageResult> getAllGoods(@RequestParam(defaultValue = "1") Integer pageNum,
                                           @RequestParam(defaultValue = "10") Integer pageSize,
-                                          HttpServletRequest request) {
+                                          @RequestParam(required = false) String name,
+                                          @RequestParam(required = false) String code,
+                                          @RequestParam(required = false) String categoryId,
+                                          @RequestParam(required = false) String status,
+                                          HttpServletRequest request){
         String token = request.getHeader("Authorization");
         JWT jwt = JWTUtil.parseToken(token);
         JWTPayload payload = jwt.getPayload();
@@ -38,30 +41,59 @@ public class GoodsController {
         // 记录日志
         logService.actionLog(token, "get", "物资列表", "获取物资列表", request.getRemoteAddr());
 
-        PageResult result = goodsService.getAllGoods(pageNum, pageSize);
+        PageResult result = goodsService.getAllGoods(pageNum, pageSize ,name, code, categoryId, status);
 
         return Result.success(result);
-    }
-
-    @PutMapping("/{id}")
-    public Result updateGoods(@PathVariable Integer id,
-                              @RequestBody Record record,
-                              HttpServletRequest request){
-        String token = request.getHeader("Authorization");
-        JWT jwt = JWTUtil.parseToken(token);
-        JWTPayload payload = jwt.getPayload();
-        String username = (String) payload.getClaim("username");
-        log.info("用户 {} 更新物资", username);
-        log.info(String.valueOf(record));
-        // 记录日志
-        logService.actionLog(token, "set", "物资列表", "更新物资", request.getRemoteAddr());
-        goodsService.updateGoods(id, record, username);
-        return Result.success();
     }
 
     @GetMapping("/{id}")
     public Result<Goods> getGoodById(@PathVariable String id){
         Goods good = goodsService.getGoodById(id);
         return Result.success(good);
+    }
+
+    @DeleteMapping("/{id}")
+    public Result<Void> deleteGoods(@PathVariable String id, HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info("用户 {} 删除物资, ids: {}", username, id);
+
+        // 记录日志
+        logService.actionLog(token, "delete", "物资列表", "删除物资", request.getRemoteAddr());
+
+        goodsService.deleteGoods(id);
+        return Result.success();
+    }
+
+    @PutMapping
+    public Result<Void> updateGoods(@RequestBody Goods goods, HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info("用户 {} 更新物资, ids: {}", username, goods.getId());
+
+        // 记录日志
+        logService.actionLog(token, "update", "物资列表", "更新物资", request.getRemoteAddr());
+
+        goodsService.updateGoods(goods);
+        return Result.success();
+    }
+
+    @PostMapping
+    public Result<Void> addGoods(@RequestBody Goods goods, HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info("用户 {} 创建物资, ids: {}", username, goods.getId());
+
+        // 记录日志
+        logService.actionLog(token, "set", "物资列表", "创建物资", request.getRemoteAddr());
+
+        goodsService.addGoods(goods);
+        return Result.success();
     }
 }

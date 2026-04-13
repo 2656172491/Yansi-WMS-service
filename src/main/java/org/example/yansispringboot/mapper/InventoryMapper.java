@@ -20,7 +20,7 @@ public interface InventoryMapper {
      */
     @Select("select * from inventory " +
             "where goods_id = #{goodsId} and warehouse_id = #{warehouseId}")
-    Inventory getByIdInventory(long goodsId, long warehouseId);
+    Inventory getInventoryById(long goodsId, long warehouseId);
 
     /**
      * 根据物资ID查询库存信息

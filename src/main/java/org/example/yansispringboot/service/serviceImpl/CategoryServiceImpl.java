@@ -11,5 +11,11 @@ import java.util.List;
 // 物资分类服务实现类
 @Service
 public class CategoryServiceImpl implements CategoryService {
+    @Autowired
+    private CategoryMapper categoryMapper;
 
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryMapper.getAllCategories();
+    }
 }

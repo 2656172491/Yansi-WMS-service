@@ -7,13 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.yansispringboot.common.Result;
 import org.example.yansispringboot.pojo.Inventory;
+import org.example.yansispringboot.pojo.Record;
 import org.example.yansispringboot.service.InventoryService;
 import org.example.yansispringboot.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +37,21 @@ public class InventoryController {
         logService.actionLog(token,"get","库存列表","查询物资:"+goodId,request.getRemoteAddr());
         List<Inventory> inventorys = inventoryService.getInventoryByGoodId(goodId);
         return Result.success(inventorys);
+    }
+
+    @PutMapping("/{id}")
+    public Result<Void> updateGoods(@PathVariable Integer id,
+                                    @RequestBody Record record,
+                                    HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        JWT jwt = JWTUtil.parseToken(token);
+        JWTPayload payload = jwt.getPayload();
+        String username = (String) payload.getClaim("username");
+        log.info("用户 {} 更新物资", username);
+        log.info(String.valueOf(record));
+        // 记录日志
+        logService.actionLog(token, "set", "物资列表", "出入库物资", request.getRemoteAddr());
+        inventoryService.updateInventory(id, record, username);
+        return Result.success();
     }
 }

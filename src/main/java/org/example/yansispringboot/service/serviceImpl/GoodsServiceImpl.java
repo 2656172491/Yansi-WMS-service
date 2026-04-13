@@ -8,8 +8,6 @@ import org.example.yansispringboot.mapper.InventoryMapper;
 import org.example.yansispringboot.mapper.RecordMapper;
 import org.example.yansispringboot.mapper.UserMapper;
 import org.example.yansispringboot.pojo.Goods;
-import org.example.yansispringboot.pojo.Inventory;
-import org.example.yansispringboot.pojo.Record;
 import org.example.yansispringboot.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,11 +30,11 @@ public class GoodsServiceImpl implements GoodsService {
     private UserMapper userMapper;
 
     @Override
-    public PageResult<Goods> getAllGoods(Integer pageNum, Integer pageSize) {
+    public PageResult<Goods> getAllGoods(Integer pageNum, Integer pageSize, String name, String code, String categoryId, String status) {
         PageResult<Goods> pageResult = new PageResult<>();
         PageHelper.startPage(pageNum, pageSize);
 
-        List<Goods> goodsList = goodsMapper.getAllGoods();
+        List<Goods> goodsList = goodsMapper.getAllGoods(name,code,categoryId,status);
         Page<Goods> page = (Page<Goods>) goodsList;
 
         pageResult.setTotal(page.getTotal());
@@ -47,37 +45,22 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void updateGoods(Integer id, Record record, String username) {
-        // 获取商品id和仓库id
-        long goodsId = record.getGoodsId();
-        long warehouseId = record.getWarehouseId();
-        // 根据商品id和仓库id获取当前库存数量
-        Inventory inventory = InventoryMapper.getByIdInventory(goodsId,warehouseId);
-        // 获取当前库存数量，并根据操作类型更新库存数量
-        int nowQuantity = inventory.getQuantity();
-        // 设置操作前的库存数量
-        record.setBeforeQuantity(nowQuantity);
-
-        // 更新库存数量
-        if (record.getType() == 1) {
-            // 入库
-            inventory.setQuantity(nowQuantity + record.getQuantity());
-        } else if (record.getType() == 2) {
-            // 出库
-            inventory.setQuantity(nowQuantity - record.getQuantity());
-        }
-        // 更新库存信息
-        InventoryMapper.updateInventory(goodsId, warehouseId, inventory.getQuantity());
-        // 设置变更后数量
-        record.setAfterQuantity(inventory.getQuantity());
-        // 设置操作人信息
-        record.setOperatorId(userMapper.getUserByName(username).getId());
-        record.setOperatorName(username);
-        recordMapper.insertRecord(record);
+    public Goods getGoodById(String id) {
+        return goodsMapper.getGoodById(id);
     }
 
     @Override
-    public Goods getGoodById(String id) {
-        return goodsMapper.getGoodById(id);
+    public void deleteGoods(String id) {
+        goodsMapper.deleteGood(id);
+    }
+
+    @Override
+    public void updateGoods(Goods goods) {
+        goodsMapper.updateGood(goods);
+    }
+
+    @Override
+    public void addGoods(Goods goods) {
+        goodsMapper.addGoods(goods);
     }
 }
