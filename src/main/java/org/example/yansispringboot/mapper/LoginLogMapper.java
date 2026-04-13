@@ -2,7 +2,10 @@ package org.example.yansispringboot.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.example.yansispringboot.pojo.LoginLog;
+
+import java.util.List;
 
 // 登录日志数据访问层
 @Mapper
@@ -15,4 +18,7 @@ public interface LoginLogMapper {
     @Insert("insert into login_log(user_id, username, status, ip, message, user_agent, create_time)" +
             "values(#{userId}, #{username}, #{status}, #{ip}, #{message}, #{userAgent},NOW())")
     void add(LoginLog loginLog);
+
+    @Select("select * from login_log order by create_time desc")
+    List<LoginLog> getLoginLogs();
 }

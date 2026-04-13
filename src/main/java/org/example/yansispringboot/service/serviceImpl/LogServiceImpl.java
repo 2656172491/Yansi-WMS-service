@@ -78,4 +78,14 @@ public class LogServiceImpl implements LogService {
         }
         return lastList;
     }
+
+    @Override
+    public List<LoginLog> getLoginLogs() {
+        return loginLogMapper.getLoginLogs();
+    }
+
+    @Override
+    public List<OperateLog> getOperateLogs() {
+        return operateLogMapper.getOperateLogs();
+    }
 }

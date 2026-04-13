@@ -27,4 +27,7 @@ public interface OperateLogMapper {
      */
     @Select("select id,username,content,type,create_time from operate_log")
     List<Map<String, Object>> getRecentActivities();
+
+    @Select("select * from operate_log order by create_time desc")
+    List<OperateLog> getOperateLogs();
 }
